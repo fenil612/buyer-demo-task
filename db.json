@@ -1,0 +1,32 @@
+{
+  "buyers": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "johndoe@example.com",
+      "address": "123 Elm Street, Springfield",
+      "phone": "123-456-7890",
+      "buyingType": "Retail",
+      "diamondPurchase": {
+        "diamondType": "Round Cut",
+        "weight": "1.5",
+        "price": 5000
+      },
+      "extraCharges": "400"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "janesmith@example.com",
+      "address": "456 Oak Avenue, Metropolis",
+      "phone": "987-654-3210",
+      "buyingType": "Wholesale",
+      "diamondPurchase": {
+        "diamondType": "Princess Cut",
+        "weight": "2.0",
+        "price": 8000
+      },
+      "extraCharges": 200
+    }
+  ]
+}
