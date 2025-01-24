@@ -131,10 +131,13 @@ const AddBuyer = () => {
             </button>
           </div>
 
-          <p className="text-sm  text-center mt-4">
-            See buyers list:{" "}
-            <NavLink to="/buyers" className="text-primary-600 underline">
-              Buyers List
+          <p className="text-sm text-center mt-6 text-gray-600">
+            See the list of buyers:{" "}
+            <NavLink
+              to="/buyers"
+              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors duration-300"
+            >
+              View Buyers List
             </NavLink>
           </p>
         </form>
