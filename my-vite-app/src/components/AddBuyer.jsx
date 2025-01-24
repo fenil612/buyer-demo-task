@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { buyerValidations } from "../validationsSchema/buyerValidation";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
-import { addBuyer } from "../redux/buyersReducer";
+import { addBuyer, fetchBuyers } from "../redux/buyersReducer";
 import Input from "../utils/Input";
 import Select from "../utils/Select";
 import Textarea from "../utils/TextArea";
@@ -29,6 +29,7 @@ const AddBuyer = () => {
     onSubmit: async (values) => {
       console.log("values==>", values);
       dispatch(addBuyer(values));
+      dispatch(fetchBuyers());
       navigate("/buyers");
       formik.resetForm();
     },
@@ -43,7 +44,7 @@ const AddBuyer = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4">
       <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-6 dark:bg-gray-800">
         <h1 className="text-2xl text-center font-bold text-gray-800 dark:text-white mb-6">
-          Add Buyer Details
+          Buyer Management
         </h1>
         <form onSubmit={formik.handleSubmit} className="space-y-6">
           {/* Personal Details */}

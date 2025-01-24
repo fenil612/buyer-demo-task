@@ -107,7 +107,6 @@ const BuyersList = () => {
       <Row gutter={16}>
         <Col xs={24} lg={8}>
           {" "}
-          {/* Reduced the card width to 8 (instead of 12) */}
           <Card
             title="Selected Buyer"
             bordered={false}
@@ -181,7 +180,6 @@ const BuyersList = () => {
         {/* Table Section */}
         <Col xs={24} lg={16}>
           {" "}
-          {/* Table takes up the rest of the space */}
           <Card
             bordered={false}
             style={{
