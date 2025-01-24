@@ -3,6 +3,9 @@ import { buyerValidations } from "../validationsSchema/buyerValidation";
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { addBuyer } from "../redux/buyersReducer";
+import Input from "../utils/Input";
+import Select from "../utils/Select";
+import Textarea from "../utils/TextArea";
 
 const AddBuyer = () => {
   const dispatch = useDispatch();
@@ -34,6 +37,11 @@ const AddBuyer = () => {
   const { handleChange, handleSubmit, values, errors, touched, handleBlur } =
     formik;
 
+  const options = [
+    { value: "Retail", label: "Retail" },
+    { value: "Wholesale", label: "Wholesale" },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4">
       <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg p-6 dark:bg-gray-800">
@@ -43,110 +51,37 @@ const AddBuyer = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Personal Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                className="form-input border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {touched.name && errors.name && (
-                <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                className="form-input border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {touched.email && errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-              )}
-            </div>
-          </div>
-          <div>
-            <label
-              htmlFor="address"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Address
-            </label>
-            <input
+            <Input
               type="text"
-              name="address"
-              id="address"
-              className="form-input border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-              value={values.address}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              label="Name"
+              name="name"
+              id="name"
+              formik={formik}
             />
-            {touched.address && errors.address && (
-              <p className="text-red-500 text-sm mt-1">{errors.address}</p>
-            )}
-          </div>
-          <div>
-            <label
-              htmlFor="phone"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Phone
-            </label>
-            <input
+            <Input
               type="text"
+              label="Email"
+              name="email"
+              id="email"
+              formik={formik}
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Select
+              label="Buying Type"
+              name="buyingType"
+              options={options}
+              formik={formik}
+            />
+            <Input
+              type="text"
+              label="Phone"
               name="phone"
               id="phone"
-              className="form-input border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-              value={values.phone}
-              onChange={handleChange}
-              onBlur={handleBlur}
+              formik={formik}
             />
-            {touched.phone && errors.phone && (
-              <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-            )}
           </div>
-          <div>
-            <label
-              htmlFor="buyingType"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Buying Type
-            </label>
-            <select
-              name="buyingType"
-              id="buyingType"
-              className="form-select mt-1"
-              value={values.buyingType}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            >
-              <option value="">Select</option>
-              <option value="Retail">Retail</option>
-              <option value="Wholesale">Wholesale</option>
-            </select>
-            {touched.buyingType && errors.buyingType && (
-              <p className="text-red-500 text-sm mt-1">{errors.buyingType}</p>
-            )}
-          </div>
+          <Textarea label="Address" name="address" formik={formik} />
 
           {/* Diamond Purchase Details */}
           <div className="border-t pt-6">
@@ -154,99 +89,39 @@ const AddBuyer = () => {
               Diamond Purchase Details
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label
-                  htmlFor="diamondType"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Diamond Type
-                </label>
-                <input
-                  type="text"
-                  name="diamondPurchase.diamondType"
-                  id="diamondType"
-                  className="form-input border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                  value={values.diamondPurchase.diamondType}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {touched.diamondPurchase?.diamondType &&
-                  errors.diamondPurchase?.diamondType && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.diamondPurchase.diamondType}
-                    </p>
-                  )}
-              </div>
-              <div>
-                <label
-                  htmlFor="weight"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Weight
-                </label>
-                <input
-                  type="number"
-                  name="diamondPurchase.weight"
-                  id="weight"
-                  className="form-input border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                  value={values.diamondPurchase.weight}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {touched.diamondPurchase?.weight &&
-                  errors.diamondPurchase?.weight && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.diamondPurchase.weight}
-                    </p>
-                  )}
-              </div>
-              <div>
-                <label
-                  htmlFor="price"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Price
-                </label>
-                <input
-                  type="number"
-                  name="diamondPurchase.price"
-                  id="price"
-                  className="form-input border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                  value={values.diamondPurchase.price}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {touched.diamondPurchase?.price &&
-                  errors.diamondPurchase?.price && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.diamondPurchase.price}
-                    </p>
-                  )}
-              </div>
+              <Input
+                type="text"
+                label="Diamond Type"
+                name="diamondPurchase.diamondType"
+                id="diamondType"
+                formik={formik}
+              />
+              <Input
+                type="text"
+                label="Diamond Weight"
+                name="diamondPurchase.weight"
+                id="weight"
+                formik={formik}
+              />
+
+              <Input
+                type="text"
+                label="Diamond Price"
+                name="diamondPurchase.price"
+                id="price"
+                formik={formik}
+              />
             </div>
           </div>
 
           {/* Extra Charges */}
-          <div>
-            <label
-              htmlFor="extraCharges"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Extra Charges
-            </label>
-            <input
-              type="number"
-              name="extraCharges"
-              id="extraCharges"
-              className="form-input border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-              value={values.extraCharges}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {touched.extraCharges && errors.extraCharges && (
-              <p className="text-red-500 text-sm mt-1">{errors.extraCharges}</p>
-            )}
-          </div>
+          <Input
+            type="text"
+            label="Extra Charges"
+            name="extraCharges"
+            id="extraCharges"
+            formik={formik}
+          />
 
           {/* Submit Button */}
           <div className="flex justify-center">
