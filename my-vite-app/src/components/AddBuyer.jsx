@@ -34,9 +34,6 @@ const AddBuyer = () => {
     },
   });
 
-  const { handleChange, handleSubmit, values, errors, touched, handleBlur } =
-    formik;
-
   const options = [
     { value: "Retail", label: "Retail" },
     { value: "Wholesale", label: "Wholesale" },
@@ -48,7 +45,7 @@ const AddBuyer = () => {
         <h1 className="text-2xl text-center font-bold text-gray-800 dark:text-white mb-6">
           Add Buyer Details
         </h1>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={formik.handleSubmit} className="space-y-6">
           {/* Personal Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Input
@@ -97,7 +94,7 @@ const AddBuyer = () => {
                 formik={formik}
               />
               <Input
-                type="text"
+                type="number"
                 label="Diamond Weight"
                 name="diamondPurchase.weight"
                 id="weight"
@@ -105,7 +102,7 @@ const AddBuyer = () => {
               />
 
               <Input
-                type="text"
+                type="number"
                 label="Diamond Price"
                 name="diamondPurchase.price"
                 id="price"
@@ -116,7 +113,7 @@ const AddBuyer = () => {
 
           {/* Extra Charges */}
           <Input
-            type="text"
+            type="number"
             label="Extra Charges"
             name="extraCharges"
             id="extraCharges"

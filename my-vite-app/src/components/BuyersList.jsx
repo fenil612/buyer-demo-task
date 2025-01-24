@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { Table, Input, Button, Form, Row, Col } from "antd";
+import { Table, Input, Button, Row, Col, Card, Typography } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBuyers, updateBuyer } from "../redux/buyersReducer";
 import * as XLSX from "xlsx";
+
+const { Title } = Typography;
 
 const BuyersList = () => {
   const dispatch = useDispatch();
@@ -11,61 +13,42 @@ const BuyersList = () => {
   const [selectedBuyer, setSelectedBuyer] = useState(null);
   const [extraCharge, setExtraCharge] = useState(0);
 
-  // Fetch buyers when the component mounts
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchBuyers());
     }
   }, [dispatch, status]);
 
-  // Handle row selection
   const handleRowSelection = (selectedRowKeys, selectedRows) => {
-    if (selectedRows.length > 0) {
-      const buyer = selectedRows[0];
-      setSelectedBuyer(buyer);
-      setExtraCharge(buyer.extraCharges); // Set the initial extra charge from selected buyer
-    }
+    const buyer = selectedRows[0];
+    setSelectedBuyer(buyer);
+    setExtraCharge(buyer.extraCharges || 0);
   };
 
-  // Handle extra charge change
-  const handleExtraChargeChange = (e) => {
-    setExtraCharge(e.target.value);
-  };
+  const handleExtraChargeChange = (e) => setExtraCharge(e.target.value);
 
-  // Handle Save button click
   const handleSave = () => {
     if (selectedBuyer) {
-      const updatedBuyer = {
-        ...selectedBuyer,
-        extraCharges: extraCharge,
-      };
-
-      // Dispatch update buyer
+      const updatedBuyer = { ...selectedBuyer, extraCharges: extraCharge };
       dispatch(updateBuyer(updatedBuyer));
     }
   };
 
-  // Generate Excel file from buyers data
   const generateExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(buyers);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Buyers");
-
-    // Save the Excel file
     XLSX.writeFile(workbook, "buyers_data.xlsx");
   };
 
-  // Handle email sending (this part should be handled server-side)
   const handleEmail = () => {
-    // Example: open default email client with an attachment
     const emailSubject = "Buyers Data";
     const emailBody =
       "Please find the attached Excel file containing the buyers' data.";
     const mailtoLink = `mailto:?subject=${encodeURIComponent(
       emailSubject
     )}&body=${encodeURIComponent(emailBody)}`;
-
-    window.location.href = mailtoLink; // Opens default email client (no attachment via mailto)
+    window.location.href = mailtoLink;
   };
 
   const columns = [
@@ -73,6 +56,7 @@ const BuyersList = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      render: (text) => <div style={{ fontWeight: "bold" }}>{text}</div>,
     },
     {
       title: "Email",
@@ -91,87 +75,149 @@ const BuyersList = () => {
     },
     {
       title: "Diamond Type",
-      dataIndex: "diamondPurchase.diamondType",
+      dataIndex: ["diamondPurchase", "diamondType"],
       key: "diamondPurchase.diamondType",
     },
     {
       title: "Diamond Price",
-      dataIndex: "diamondPurchase.price",
+      dataIndex: ["diamondPurchase", "price"],
       key: "diamondPurchase.price",
-      render: (price) => `$${price}`,
+      render: (price) => <span style={{ color: "#1890ff" }}>${price}</span>,
     },
     {
       title: "Extra Charges",
       dataIndex: "extraCharges",
       key: "extraCharges",
-      render: (charges) => `$${charges}`,
+      render: (charges) => <span style={{ color: "#fa541c" }}>${charges}</span>,
     },
   ];
 
   return (
-    <div>
-      {/* Search Section */}
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form layout="vertical">
-            <Form.Item label="Selected Buyer">
-              {selectedBuyer ? (
-                <>
-                  <div>Name: {selectedBuyer.name}</div>
-                  <div>Email: {selectedBuyer.email}</div>
-                  <div>Address: {selectedBuyer.address}</div>
-                  <div>Phone: {selectedBuyer.phone}</div>
-                  <div>
-                    Diamond Type: {selectedBuyer.diamondPurchase.diamondType}
-                  </div>
-                  <div>
-                    Diamond Price: ${selectedBuyer.diamondPurchase.price}
-                  </div>
-                  <div>
-                    <Input
-                      type="number"
-                      value={extraCharge}
-                      onChange={handleExtraChargeChange}
-                      addonBefore="Extra Charges: $"
-                    />
-                  </div>
-                </>
-              ) : (
-                <div>Select a buyer to view details.</div>
-              )}
-            </Form.Item>
-          </Form>
-        </Col>
-        <Col span={12}>
-          <Button onClick={handleSave} type="primary" disabled={!selectedBuyer}>
-            Save Changes
-          </Button>
+    <div style={{ padding: "30px", backgroundColor: "#f4f6f9" }}>
+      {/* Title Section */}
+      <Row justify="center" style={{ marginBottom: "30px" }}>
+        <Col>
+          <Title level={2} style={{ color: "#333", fontWeight: "bold" }}>
+            Buyer Management
+          </Title>
         </Col>
       </Row>
 
-      {/* Table Section */}
-      <Table
-        columns={columns}
-        dataSource={buyers}
-        rowSelection={{
-          type: "radio",
-          onChange: handleRowSelection,
-        }}
-        rowKey="id"
-        pagination={false}
-      />
-
-      {/* Actions */}
-      <Row gutter={16} style={{ marginTop: "20px" }}>
-        <Col span={12}>
-          <Button onClick={generateExcel} type="primary">
-            Download Excel
-          </Button>
+      {/* Buyer Information Section */}
+      <Row gutter={16}>
+        <Col xs={24} lg={8}>
+          {" "}
+          {/* Reduced the card width to 8 (instead of 12) */}
+          <Card
+            title="Selected Buyer"
+            bordered={false}
+            style={{
+              background: "#ffffff",
+              padding: "15px",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+              marginBottom: "20px",
+              height: "100%",
+            }}
+          >
+            {selectedBuyer ? (
+              <>
+                <div className="py-2">
+                  <strong>Name:</strong> {selectedBuyer?.name || "-"}
+                </div>
+                <div className="py-2">
+                  <strong>Email:</strong> {selectedBuyer?.email || "-"}
+                </div>
+                <div className="py-2">
+                  <strong>Address:</strong> {selectedBuyer?.address || "-"}
+                </div>
+                <div className="py-2">
+                  <strong>Phone:</strong> {selectedBuyer?.phone || "-"}
+                </div>
+                <div className="py-2">
+                  <strong>Diamond Type:</strong>{" "}
+                  {selectedBuyer?.diamondPurchase?.diamondType || "-"}
+                </div>
+                <div className="py-2">
+                  <strong>Diamond Price:</strong> $
+                  {selectedBuyer?.diamondPurchase?.price || "-"}
+                </div>
+                <div className="py-2">
+                  <Input
+                    type="number"
+                    value={extraCharge}
+                    onChange={handleExtraChargeChange}
+                    addonBefore="Extra Charges: $"
+                    style={{
+                      width: "100%",
+                      padding: "8px",
+                      borderRadius: "5px",
+                      boxShadow: "0 1px 5px rgba(0, 0, 0, 0.1)",
+                    }}
+                  />
+                </div>
+                <Button
+                  onClick={handleSave}
+                  type="primary"
+                  disabled={!selectedBuyer}
+                  style={{
+                    width: "100%",
+                    marginTop: "20px",
+                    padding: "12px",
+                    borderRadius: "5px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Save Changes
+                </Button>
+              </>
+            ) : (
+              <div style={{ color: "#999" }}>
+                Select a buyer to view details.
+              </div>
+            )}
+          </Card>
         </Col>
-        <Col span={12}>
-          <Button onClick={handleEmail} type="primary">
-            Send Email with Attachment
-          </Button>
+
+        {/* Table Section */}
+        <Col xs={24} lg={16}>
+          {" "}
+          {/* Table takes up the rest of the space */}
+          <Card
+            bordered={false}
+            style={{
+              background: "#ffffff",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+              padding: "20px",
+            }}
+          >
+            <Table
+              columns={columns}
+              dataSource={buyers}
+              rowSelection={{
+                type: "radio",
+                onChange: handleRowSelection,
+              }}
+              rowKey="id"
+              pagination={false}
+              style={{ backgroundColor: "#fff" }}
+            />
+            <div className="flex justify-end gap-x-4 my-4">
+              <Button
+                onClick={generateExcel}
+                type="primary"
+                className="bg-green-500 text-white py-3 px-6 rounded-lg font-semibold"
+              >
+                Download Excel
+              </Button>
+              <Button
+                onClick={handleEmail}
+                type="primary"
+                className="bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold"
+              >
+                Send Email with Attachment
+              </Button>
+            </div>
+          </Card>
         </Col>
       </Row>
     </div>
