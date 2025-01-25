@@ -93,101 +93,91 @@ const BuyersList = () => {
   ];
 
   return (
-    <div style={{ padding: "30px", backgroundColor: "#f4f6f9" }}>
+    <div className="p-4 bg-gray-100 min-h-screen">
       {/* Title Section */}
-      <Row justify="center" style={{ marginBottom: "30px" }}>
+      <Row justify="center" className="mb-6">
         <Col>
-          <Title level={2} style={{ color: "#333", fontWeight: "bold" }}>
+          <Title level={2} className="text-gray-700 font-bold">
             Buyer Management
           </Title>
         </Col>
       </Row>
 
-      {/* Buyer Information Section */}
-      <Row gutter={16}>
-        <Col xs={24} lg={8}>
-          {" "}
+      <Row gutter={[16, 16]}>
+        {/* Buyer Details */}
+        <Col xs={24} md={8}>
           <Card
             title="Selected Buyer"
             bordered={false}
-            style={{
-              background: "#ffffff",
-              padding: "15px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-              marginBottom: "20px",
-              height: "100%",
-            }}
+            className="shadow-lg h-full"
           >
             {selectedBuyer ? (
               <>
-                <div className="py-2">
+                <div className="mb-2">
                   <strong>Name:</strong> {selectedBuyer?.name || "-"}
                 </div>
-                <div className="py-2">
+                <div className="mb-2">
                   <strong>Email:</strong> {selectedBuyer?.email || "-"}
                 </div>
-                <div className="py-2">
+                <div className="mb-2">
                   <strong>Address:</strong> {selectedBuyer?.address || "-"}
                 </div>
-                <div className="py-2">
+                <div className="mb-2">
                   <strong>Phone:</strong> {selectedBuyer?.phone || "-"}
                 </div>
-                <div className="py-2">
+                <div className="mb-2">
                   <strong>Diamond Type:</strong>{" "}
                   {selectedBuyer?.diamondPurchase?.diamondType || "-"}
                 </div>
-                <div className="py-2">
+                <div className="mb-2">
                   <strong>Diamond Price:</strong> $
                   {selectedBuyer?.diamondPurchase?.price || "-"}
                 </div>
-                <div className="py-2">
+                <div className="mb-4">
                   <Input
                     type="number"
                     value={extraCharge}
                     onChange={handleExtraChargeChange}
                     addonBefore="Extra Charges: $"
-                    style={{
-                      width: "100%",
-                      padding: "8px",
-                      borderRadius: "5px",
-                      boxShadow: "0 1px 5px rgba(0, 0, 0, 0.1)",
-                    }}
+                    className="w-full"
                   />
                 </div>
                 <Button
                   onClick={handleSave}
                   type="primary"
+                  className="w-full font-semibold"
                   disabled={!selectedBuyer}
-                  style={{
-                    width: "100%",
-                    marginTop: "20px",
-                    padding: "12px",
-                    borderRadius: "5px",
-                    fontWeight: "bold",
-                  }}
                 >
                   Save Changes
                 </Button>
               </>
             ) : (
-              <div style={{ color: "#999" }}>
+              <div className="text-gray-500">
                 Select a buyer to view details.
               </div>
             )}
           </Card>
         </Col>
 
-        {/* Table Section */}
-        <Col xs={24} lg={16}>
-          {" "}
-          <Card
-            bordered={false}
-            style={{
-              background: "#ffffff",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-              padding: "20px",
-            }}
-          >
+        {/* Table and Actions */}
+        <Col xs={24} md={16}>
+          <Card bordered={false} className="shadow-lg">
+            <div className="flex flex-wrap justify-end gap-4 mb-4">
+              <Button
+                onClick={generateExcel}
+                type="primary"
+                className="bg-green-500 text-white font-semibold"
+              >
+                Download Excel
+              </Button>
+              <Button
+                onClick={handleEmail}
+                type="primary"
+                className="bg-blue-500 text-white font-semibold"
+              >
+                Send Email
+              </Button>
+            </div>
             <Table
               columns={columns}
               dataSource={buyers}
@@ -196,25 +186,9 @@ const BuyersList = () => {
                 onChange: handleRowSelection,
               }}
               rowKey="id"
-              pagination={false}
-              style={{ backgroundColor: "#fff" }}
+              pagination={{ pageSize: 2 }}
+              scroll={{ x: "100%" }}
             />
-            <div className="flex justify-end gap-x-4 my-4">
-              <Button
-                onClick={generateExcel}
-                type="primary"
-                className="bg-green-500 text-white py-3 px-6 rounded-lg font-semibold"
-              >
-                Download Excel
-              </Button>
-              <Button
-                onClick={handleEmail}
-                type="primary"
-                className="bg-blue-500 text-white py-3 px-6 rounded-lg font-semibold"
-              >
-                Send Email with Attachment
-              </Button>
-            </div>
           </Card>
         </Col>
       </Row>
