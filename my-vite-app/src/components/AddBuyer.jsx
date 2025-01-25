@@ -81,7 +81,9 @@ const AddBuyer = () => {
                 formik={formik}
               />
             </div>
-            <Textarea label="Address" name="address" formik={formik} />
+            <div className="mt-5">
+              <Textarea label="Address" name="address" formik={formik} />
+            </div>
           </div>
 
           {/* Diamond Purchase Section */}
